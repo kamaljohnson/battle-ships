@@ -17,31 +17,66 @@
 </main>
 <script>
 
-    let boatImageUrl = "https://cdn-icons.flaticon.com/png/512/870/premium/870170.png?token=exp=1643200075~hmac=11089a6c8c40dc6d9b132b5b9fdca329"
-    let attachImageUrl = "https://cdn-icons-png.flaticon.com/512/1828/1828665.png"
+    let shipImageUrl = "https://cdn-icons.flaticon.com/png/512/870/premium/870170.png?token=exp=1643200075~hmac=11089a6c8c40dc6d9b132b5b9fdca329"
+    let attackImageUrl = "https://cdn-icons-png.flaticon.com/512/1828/1828665.png"
+
+    let maxRows = 5;
+    let maxColumns = 5;
+
+    let gameBoard;
 
     frappe.ready(function() {
+        gameBoard = $(".game-board");
+        
         loadBoard();
+        boardInterationHandler();
     });
 
     function loadBoard() {
-        let board = $(".game-board");
-
-
-        let maxRows = 6;
-        let maxColumns = 5;
 
         for(var i = 0; i < maxRows; i++) {
             let row = $("<div class='row'>");
-            board.append(row);
             for(var j = 0; j < maxColumns; j++) {
-                row.append(`
-                    <div class="board-row-item row-item frappe-card m-1" style="height: 50px; width: 50px">
-                    </div>
+                let rowItem = $(`
+                    <div class="board-row-item row-item frappe-card m-1" style="height: 50px; width: 50px"></div>
                 `);
+                rowItem.attr('row', i);
+                rowItem.attr('col', j);
+                rowItem.attr('item', 'Blank')
+                row.append(rowItem);
             }
+            gameBoard.append(row);
         }
     }
+
+    function boardInterationHandler() {
+        $(".board-row-item").click(function() {
+            let rowIndex = $(this).attr('row');
+            let colIndex = $(this).attr('col');
+
+            // TODO: use some other logic here, this is a vulnarability
+            let curItem = $(this).attr('item');
+
+            $(this).empty();
+
+            let newItem = $(``)
+            
+            if (curItem == 'Blank') {
+                newItem = $(`<img src=${shipImageUrl}>`)
+                $(this).attr('item', 'Ship')
+            } else if (curItem == 'Ship') {
+                newItem = $(`<img src=${attackImageUrl}>`)
+                $(this).attr('item', 'Attack')
+            } else if (curItem == 'Attack') {
+                newItem = $(``)
+                $(this).attr('item', 'Blank')
+            }
+
+
+            $(this).append(newItem);
+        });
+    }
+
 </script>
 <style>
     .title {
