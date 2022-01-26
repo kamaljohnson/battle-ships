@@ -43,3 +43,8 @@ class PlayerBoard(Document):
 			'attack_coordinates': attack_coordinates
 		}
 		return formation
+
+	def clear_board(self):
+		self.ship_coordinates = ''
+		self.attack_coordinates = ''
+		self.save()
