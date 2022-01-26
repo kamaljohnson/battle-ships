@@ -26,9 +26,11 @@ class PlayerBoard(Document):
 	def get_formation_as_dict(self):
 		formation_dict = {'ship_coordinates': [], 'attack_coordinates': []}
 
-		for ship_coordinate in self.ship_coordinates.split(' '):
-			formation_dict['ship_coordinates'].append(list(ship_coordinate))
-		for attack_coordinate in self.attack_coordinates.split(' '):
-			formation_dict['attack_coordinates'].append(list(attack_coordinate))
+		if self.ship_coordinates:
+			for ship_coordinate in self.ship_coordinates.split(' '):
+				formation_dict['ship_coordinates'].append(list(ship_coordinate))
+		if self.attack_coordinates:
+			for attack_coordinate in self.attack_coordinates.split(' '):
+				formation_dict['attack_coordinates'].append(list(attack_coordinate))
 		
 		return formation_dict
