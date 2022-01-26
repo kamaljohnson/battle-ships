@@ -12,6 +12,9 @@ class GlobalBoard(Document):
 		self.set_attacked_coordinates()
 		self.set_best_ship_coordinates()
 
+		game_manager = frappe.get_doc("Game Manager")
+		game_manager.start_season()
+
 	def set_global_formation(self):
 		all_player_boards = frappe.get_all("Player Board", fields=['ship_coordinates', 'attack_coordinates'])
 

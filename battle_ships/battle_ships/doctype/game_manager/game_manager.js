@@ -8,7 +8,10 @@ frappe.ui.form.on('Game Manager', {
 			() => {
 				frappe.confirm(
 					`Are you sure you want to start a battle now?`,
-					() => frm.call('start_battle').then((r) => console.log('battle started!!'))
+					() => frm.call('start_battle').then((r) => { 
+						console.log('battle started!!');
+						frm.refresh();
+					})
 				);
 			},
 		);
