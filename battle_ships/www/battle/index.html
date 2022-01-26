@@ -36,14 +36,22 @@
     frappe.ready(function() {
         gameBoard = $(".game-board");
         
-        loadBoard();
-        boardInterationHandler();
+        fetchSessionPlayerId().then(() => {
+            loadBoard();
+        })
 
-        fetchSessionPlayerId()
     });
 
     function loadBoard() {
+        fetchFormation().then((r) => {
+            let items = r.message;
+            loadBlankBoard();
+            placeItemsOnBoard(items);
+            boardInterationHandler();
+        })
+    }
 
+    function loadBlankBoard() {
         for(var i = 0; i < maxRows; i++) {
             let row = $("<div class='row'>");
             for(var j = 0; j < maxColumns; j++) {
@@ -56,6 +64,18 @@
                 row.append(rowItem);
             }
             gameBoard.append(row);
+        }
+    }
+
+    function placeItemsOnBoard(items) {
+        let itemKeys = ['ship_coordinates', 'attack_coordinates'];
+
+        for (var i = 0; i < itemKeys.length; i++) {
+            for (var j = 0; j < items[itemKeys[i]].length; j++) {
+                let coordinate = items[itemKeys[i]][j];
+                let itemName = (itemKeys[i] == 'ship_coordinates' ? 'Ship' : 'Attack');
+                placeItemWithCoordinates(coordinate[0], coordinate[1], itemName);
+            }
         }
     }
 
@@ -86,7 +106,12 @@
         });
     }
 
-    function placeItem(holder, itemName) {
+    function placeItemWithCoordinates(row, col, itemName) {
+        holder = gameBoard.find(`[row=${row}][col=${col}]`);
+        placeItem(holder, itemName, false);
+    }
+    
+    function placeItem(holder, itemName, upload=true) {
         let prevItem = $(holder).attr('item');
 
         $(holder).empty();
@@ -102,8 +127,10 @@
             shipsPlaced--;
         }
 
-        if (attacksPlaced == maxAttacks && shipsPlaced == maxShips) {
-            uploadFormation();
+        if (upload) {
+            if (attacksPlaced == maxAttacks && shipsPlaced == maxShips) {
+                uploadFormation();
+            }
         }
     }
 
@@ -164,6 +191,15 @@
             })
         }
         return playerId
+    }
+
+    async function fetchFormation() {
+        return frappe.call({
+            method: 'battle_ships.www.battle.index.fetch_formation',
+            args: {
+                player_id: await getSessionPlayerId()
+            }
+        })
     }
 
 </script>
