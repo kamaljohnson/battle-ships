@@ -14,5 +14,8 @@ class GameManager(Document):
 		global_board = frappe.get_doc("Global Board")
 		global_board.start_battle()
 
+		self.season_paused = False
+		self.save()
+
 	def get_board_size(self):
 		return list(map(int, self.board_size.split(' ')))

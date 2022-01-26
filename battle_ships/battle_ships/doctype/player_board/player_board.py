@@ -22,7 +22,7 @@ class PlayerBoard(Document):
 
 			self.ship_coordinates = ship_coordinate_str
 			self.attack_coordinates = attach_coordinate_str
-			self.save()
+			self.save(ignore_permissions=True)
 
 			return
 		
