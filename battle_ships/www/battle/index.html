@@ -23,6 +23,12 @@
     let maxRows = 5;
     let maxColumns = 5;
 
+    let maxShips = 3;
+    let maxAttacks = 3;
+
+    let shipsPlaced = 0;
+    let attacksPlaced = 0;
+
     let gameBoard;
 
     frappe.ready(function() {
@@ -54,27 +60,44 @@
             let rowIndex = $(this).attr('row');
             let colIndex = $(this).attr('col');
 
-            // TODO: use some other logic here, this is a vulnarability
             let curItem = $(this).attr('item');
 
-            $(this).empty();
-
-            let newItem = $(``)
-            
             if (curItem == 'Blank') {
-                newItem = $(`<img src=${shipImageUrl}>`)
-                $(this).attr('item', 'Ship')
-            } else if (curItem == 'Ship') {
-                newItem = $(`<img src=${attackImageUrl}>`)
-                $(this).attr('item', 'Attack')
-            } else if (curItem == 'Attack') {
-                newItem = $(``)
-                $(this).attr('item', 'Blank')
+                if (shipsPlaced < maxShips) {
+                    placeItem(this, 'Ship');
+                } else {
+                    curItem = 'Ship';
+                }
             }
-
-
-            $(this).append(newItem);
+            if (curItem == 'Ship') {
+                if(attacksPlaced < maxAttacks) {
+                    placeItem(this, 'Attack');
+                } else {
+                    curItem = 'Attack';
+                }
+            }
+            if (curItem == 'Attack') {
+                placeItem(this, 'Blank');
+            }
         });
+    }
+
+    function placeItem(holder, itemName) {
+        let prevItem = $(holder).attr('item');
+
+        $(holder).empty();
+        $(holder).attr('item', itemName)
+        if (['Attack', 'Ship'].includes(itemName)) {
+            $(holder).append($(`<img src=${itemName == 'Attack' ? attackImageUrl : shipImageUrl}>`))
+            itemName == 'Attack' ? attacksPlaced++ : shipsPlaced++;
+        }
+
+        if (prevItem == 'Attack') {
+            attacksPlaced--;
+        } else if(prevItem == 'Ship') {
+            shipsPlaced--;
+        }
+
     }
 
 </script>
