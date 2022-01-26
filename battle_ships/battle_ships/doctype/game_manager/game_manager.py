@@ -41,13 +41,11 @@ class GameManager(Document):
 		return list(map(int, self.board_size.split(' ')))
 
 	def stop_season(self):
-		print("STOPPING SEASON")
 		self.season_paused = True
 		self.save()
 		frappe.db.commit()
 
 	def start_season(self):
-		print("STARTING SEASON")
 		self.season_paused = False
 		self.save()
 		frappe.db.commit()

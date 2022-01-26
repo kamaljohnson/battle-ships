@@ -9,7 +9,12 @@
   "period",
   "next_battle_time",
   "season_paused",
-  "board_size"
+  "board_size",
+  "section_break_5",
+  "base_score",
+  "score_decrement_for_ships_sank",
+  "score_increment_for_best_ships",
+  "score_increment_for_best_attacks"
  ],
  "fields": [
   {
@@ -32,12 +37,36 @@
    "fieldname": "board_size",
    "fieldtype": "Data",
    "label": "Board Size"
+  },
+  {
+   "fieldname": "base_score",
+   "fieldtype": "Int",
+   "label": "Base Score"
+  },
+  {
+   "fieldname": "score_decrement_for_ships_sank",
+   "fieldtype": "Int",
+   "label": "Score Decrement For Ships Sank"
+  },
+  {
+   "fieldname": "score_increment_for_best_ships",
+   "fieldtype": "Int",
+   "label": "Score Increment For Best Ships "
+  },
+  {
+   "fieldname": "score_increment_for_best_attacks",
+   "fieldtype": "Int",
+   "label": "Score Increment For Best Attacks"
+  },
+  {
+   "fieldname": "section_break_5",
+   "fieldtype": "Section Break"
   }
  ],
  "index_web_pages_for_search": 1,
  "issingle": 1,
  "links": [],
- "modified": "2022-01-26 23:43:58.705553",
+ "modified": "2022-01-27 03:51:43.350986",
  "modified_by": "Administrator",
  "module": "Battle Ships",
  "name": "Game Manager",

@@ -1,7 +1,6 @@
 # Copyright (c) 2022, Kamal Johnson and contributors
 # For license information, please see license.txt
 
-# import frappe
 import frappe
 from frappe.model.document import Document
 import json
@@ -22,12 +21,42 @@ class Player(Document):
 		return frappe.get_doc("Player Board", self.player_board).get_formation()
 
 	def compute_score(self):
+		game_manager = frappe.get_doc("Game Manager")
+		score = game_manager.base_score
+
 		global_board = frappe.get_doc("Global Board")
+		player_board_doc = frappe.get_doc("Player Board", self.player_board)
 		
 		attacked_coordinates = json.loads(global_board.attacked_coordinates)
 
-		# TODO: check how many ships sank
+		player_ship_coordinates = json.loads(player_board_doc.ship_coordinates)
+		player_attack_coordinates = json.loads(player_board_doc.attack_coordinates)
 
+		ships_sank = 0
+		for attacked_coordinate in attacked_coordinates:
+			for player_ship_coordinate in player_ship_coordinates:
+				if attacked_coordinate == player_ship_coordinate:
+					ships_sank += 1
+		
+		score += (ships_sank * game_manager.score_decrement_for_ships_sank)
 
-		# TODO: check how many best ship coordinates
-		# TODO: check attack value
+		best_ship_coordinates = json.loads(global_board.best_ship_coordinates)
+
+		best_ships = 0
+		for best_ship_coordinate in best_ship_coordinates:
+			for player_ship_coordinate in player_ship_coordinates:
+				if best_ship_coordinate == player_ship_coordinate:
+					best_ships += 1
+
+		score += (ships_sank * game_manager.score_increment_for_best_ships)
+		
+		best_attacks = 0
+		for attacked_coordinate in attacked_coordinates:
+			for player_attack_coordinate in player_attack_coordinates:
+				if attacked_coordinate == player_attack_coordinate:
+					best_attacks += 1
+		
+		score += (ships_sank * game_manager.score_increment_for_best_attacks)
+
+		self.score = score
+		self.save()
