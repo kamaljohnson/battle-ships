@@ -31,11 +31,15 @@
 
     let gameBoard;
 
+    let fetchSessionPlayerId = getSessionPlayerId;
+
     frappe.ready(function() {
         gameBoard = $(".game-board");
         
         loadBoard();
         boardInterationHandler();
+
+        fetchSessionPlayerId();
     });
 
     function loadBoard() {
@@ -98,6 +102,59 @@
             shipsPlaced--;
         }
 
+        if (attacksPlaced == maxAttacks && shipsPlaced == maxShips) {
+            uploadResult();
+        }
+    }
+
+    async function uploadResult() {
+        frappe.call({
+            method: 'battle_ships.www.battle.index.upload_result',
+            args: {
+                player_id: await getSessionPlayerId(),
+                result: getItems()
+            },
+            callback: function() {
+                console.log('result uploaded');
+            }
+        })
+    }
+
+    function getItems() {
+        let shipElements = gameBoard.find(`[item='Ship']`);
+        let attackElements = gameBoard.find(`[item='Attack'`);
+
+        let ships = [];
+        let attacks = [];
+
+        for (var i = 0; i < shipElements.length; i++) {
+
+            let row = parseInt($(shipElements[i]).attr('row'));
+            let col = parseInt($(shipElements[i]).attr('col'));
+
+            ships.push([row, col]);
+        }
+
+        for (var i = 0; i < attackElements.length; i++) {
+            let row = parseInt($(attackElements[i]).attr('row'));
+            let col = parseInt($(attackElements[i]).attr('col'));
+
+            attacks.push([row, col]);
+        }
+
+        return {
+            ships: ships,
+            attacks: attacks
+        }
+    }
+
+    async function getSessionPlayerId() {
+        if (localStorage['sessionPlayerId']) {
+            return localStorage['sessionPlayerId'];
+        } else {
+            // TODO: fetch new player id from server
+            return '12342355';
+        }
     }
 
 </script>
