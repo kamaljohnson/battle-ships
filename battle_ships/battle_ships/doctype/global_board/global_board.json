@@ -7,7 +7,22 @@
  "engine": "InnoDB",
  "field_order": [
   "ships",
-  "attacks"
+  "column_break_2",
+  "attacks",
+  "section_break_4",
+  "max_ships",
+  "min_ships",
+  "column_break_7",
+  "max_attacks",
+  "min_attacks",
+  "section_break_10",
+  "best_ship_coordinates",
+  "column_break_12",
+  "attacked_coordinates",
+  "section_break_14",
+  "normalized_ships",
+  "column_break_16",
+  "normalized_attacks"
  ],
  "fields": [
   {
@@ -19,12 +34,80 @@
    "fieldname": "attacks",
    "fieldtype": "Data",
    "label": "Attacks"
+  },
+  {
+   "fieldname": "max_ships",
+   "fieldtype": "Data",
+   "label": "Max Ships"
+  },
+  {
+   "fieldname": "min_ships",
+   "fieldtype": "Data",
+   "label": "Min Ships"
+  },
+  {
+   "fieldname": "max_attacks",
+   "fieldtype": "Data",
+   "label": "Max Attacks"
+  },
+  {
+   "fieldname": "min_attacks",
+   "fieldtype": "Data",
+   "label": "Min Attacks"
+  },
+  {
+   "fieldname": "column_break_2",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "section_break_4",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "column_break_7",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "section_break_10",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "best_ship_coordinates",
+   "fieldtype": "Data",
+   "label": "Best Ship Coordinates"
+  },
+  {
+   "fieldname": "column_break_12",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "attacked_coordinates",
+   "fieldtype": "Data",
+   "label": "Attacked Coordinates"
+  },
+  {
+   "fieldname": "section_break_14",
+   "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "normalized_ships",
+   "fieldtype": "Data",
+   "label": "Normalized Ships"
+  },
+  {
+   "fieldname": "column_break_16",
+   "fieldtype": "Column Break"
+  },
+  {
+   "fieldname": "normalized_attacks",
+   "fieldtype": "Data",
+   "label": "Normalized Attacks"
   }
  ],
  "index_web_pages_for_search": 1,
  "issingle": 1,
  "links": [],
- "modified": "2022-01-26 16:58:24.652772",
+ "modified": "2022-01-27 01:11:03.315960",
  "modified_by": "Administrator",
  "module": "Battle Ships",
  "name": "Global Board",

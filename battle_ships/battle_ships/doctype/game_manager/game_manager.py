@@ -7,7 +7,7 @@ from frappe.model.document import Document
 class GameManager(Document):
 	@frappe.whitelist()
 	def start_battle(self):
-		print("------------------- BATTLE STARTED --------------------")
+		print("\n\n------------------- BATTLE STARTED --------------------\n")
 		self.season_paused = True
 		self.save()
 
@@ -16,6 +16,9 @@ class GameManager(Document):
 
 		self.season_paused = False
 		self.save()
+
+		print("\n------------------- BATTLE ENDED --------------------\n\n")
+
 
 	def get_board_size(self):
 		return list(map(int, self.board_size.split(' ')))
