@@ -9,12 +9,21 @@ class GlobalBoard(Document):
 	def start_battle(self):
 		self.set_global_formation()
 		self.normalize_board()
+		self.set_attacked_coordinates()
+		self.set_best_ship_coordinates()
 
 	def set_global_formation(self):
 		all_player_boards = frappe.get_all("Player Board", fields=['ship_coordinates', 'attack_coordinates'])
 
 		ships = {}
 		attacks = {}
+
+		board_size = frappe.get_doc("Game Manager").get_board_size()
+
+		for i in range(board_size[0]):
+			for j in range(board_size[1]):
+				ships[f'{i}{j}'] = 0
+				attacks[f'{i}{j}'] = 0
 
 		for board in all_player_boards:
 			if board.ship_coordinates:
@@ -74,4 +83,28 @@ class GlobalBoard(Document):
 		self.normalized_ships = json.dumps(normalized_ships)
 		self.normalized_attacks = json.dumps(normalized_attacks)
 
+		self.save()
+
+	def set_attacked_coordinates(self):
+		normalized_attacks = json.loads(self.normalized_attacks)
+		
+		attacked_coordinates = []
+
+		for coordinate in normalized_attacks:
+			if normalized_attacks[coordinate] >= 0.5:
+				attacked_coordinates.append(coordinate)
+		
+		self.attacked_coordinates = json.dumps(attacked_coordinates)
+		self.save()
+
+	def set_best_ship_coordinates(self):
+		normalized_attacks = json.loads(self.normalized_attacks)
+		
+		best_ship_coordinates = []
+
+		for coordinate in normalized_attacks:
+			if normalized_attacks[coordinate] == 0:
+				best_ship_coordinates.append(coordinate)
+		
+		self.best_ship_coordinates = json.dumps(best_ship_coordinates)
 		self.save()
