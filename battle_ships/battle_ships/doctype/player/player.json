@@ -6,7 +6,10 @@
  "editable_grid": 1,
  "engine": "InnoDB",
  "field_order": [
-  "player_board"
+  "participated",
+  "score",
+  "player_board",
+  "new_result_available"
  ],
  "fields": [
   {
@@ -14,11 +17,28 @@
    "fieldtype": "Link",
    "label": "Player Board",
    "options": "Player Board"
+  },
+  {
+   "default": "0",
+   "fieldname": "participated",
+   "fieldtype": "Check",
+   "label": "Participated"
+  },
+  {
+   "fieldname": "score",
+   "fieldtype": "Data",
+   "label": "Score"
+  },
+  {
+   "default": "0",
+   "fieldname": "new_result_available",
+   "fieldtype": "Check",
+   "label": "New Result Available"
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2022-01-26 20:08:42.332457",
+ "modified": "2022-01-27 02:03:27.419326",
  "modified_by": "Administrator",
  "module": "Battle Ships",
  "name": "Player",

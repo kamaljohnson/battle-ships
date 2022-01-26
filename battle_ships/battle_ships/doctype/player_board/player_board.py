@@ -3,6 +3,7 @@
 
 import frappe
 from frappe.model.document import Document
+import json
 
 class PlayerBoard(Document):
 	def update_formation(self, formation):
@@ -11,32 +12,34 @@ class PlayerBoard(Document):
 			if game_manager.season_paused:
 				return 'Season Paused'
 
-			ship_coordinate_str = ''
-			attach_coordinate_str = ''
-			for ship_coordinate in formation['shipCoordinates']:
-				ship_coordinate_str += ''.join(list(map(str, ship_coordinate)))
-				if ship_coordinate != formation['shipCoordinates'][-1]: ship_coordinate_str += ' '
-			for attach_coordinate in formation['attackCoordinates']:
-				attach_coordinate_str += ''.join(list(map(str, attach_coordinate)))
-				if attach_coordinate != formation['attackCoordinates'][-1]: attach_coordinate_str += ' '
+			ship_coordinates = []
+			attack_coordinates = []
+			for coordinate in formation['shipCoordinates']:
+				ship_coordinates.append(str(coordinate))
 
-			self.ship_coordinates = ship_coordinate_str
-			self.attack_coordinates = attach_coordinate_str
+			for coordinate in formation['attackCoordinates']:
+				attack_coordinates.append(str(coordinate))
+
+			self.ship_coordinates = json.dumps(ship_coordinates)
+			self.attack_coordinates = json.dumps(attack_coordinates)
 			self.save(ignore_permissions=True)
-
 			return
 		
 	def get_formation(self):
-		return self.get_formation_as_dict()
+		sc = json.loads('[]' if self.ship_coordinates == '' else self.ship_coordinates)
+		ac = json.loads('[]' if self.attack_coordinates == '' else self.attack_coordinates)
 
-	def get_formation_as_dict(self):
-		formation_dict = {'ship_coordinates': [], 'attack_coordinates': []}
+		ship_coordinates = []
+		attack_coordinates = []
 
-		if self.ship_coordinates:
-			for ship_coordinate in self.ship_coordinates.split(' '):
-				formation_dict['ship_coordinates'].append(list(ship_coordinate))
-		if self.attack_coordinates:
-			for attack_coordinate in self.attack_coordinates.split(' '):
-				formation_dict['attack_coordinates'].append(list(attack_coordinate))
-		
-		return formation_dict
+		for c in sc:
+			ship_coordinates.append(json.loads(c))
+
+		for c in ac:
+			attack_coordinates.append(json.loads(c))
+
+		formation = {
+			'ship_coordinates': ship_coordinates,
+			'attack_coordinates': attack_coordinates
+		}
+		return formation

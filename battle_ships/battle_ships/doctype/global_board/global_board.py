@@ -25,18 +25,18 @@ class GlobalBoard(Document):
 
 		for i in range(board_size[0]):
 			for j in range(board_size[1]):
-				ships[f'{i}{j}'] = 0
-				attacks[f'{i}{j}'] = 0
+				ships[f'[{i}, {j}]'] = 0
+				attacks[f'[{i}, {j}]'] = 0
 
 		for board in all_player_boards:
 			if board.ship_coordinates:
-				for coordinate_str in board.ship_coordinates.split(' '):
-					if coordinate_str in ships: 
+				for coordinate_str in json.loads(board.ship_coordinates):
+					if coordinate_str in ships:
 						ships[coordinate_str] += 1
 					else:
 						ships[coordinate_str] = 1
 			if board.attack_coordinates:
-				for coordinate_str in board.attack_coordinates.split(' '):
+				for coordinate_str in json.loads(board.attack_coordinates):
 					if coordinate_str in attacks: 
 						attacks[coordinate_str] += 1
 					else:

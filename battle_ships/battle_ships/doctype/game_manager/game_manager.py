@@ -1,9 +1,9 @@
 # Copyright (c) 2022, Kamal Johnson and contributors
 # For license information, please see license.txt
 
+from dataclasses import fields
 import frappe
 from frappe.model.document import Document
-from frappe import enqueue
 
 class GameManager(Document):
 	@frappe.whitelist()
@@ -14,10 +14,21 @@ class GameManager(Document):
 		global_board = frappe.get_doc("Global Board")
 		global_board.set_battle_results()
 
+		self.update_player_scores()
+
 		print("\n------------------- BATTLE ENDED --------------------\n\n")
 
-	def update_player_score(self):
-		pass
+	def update_player_scores(self):
+		all_players = frappe.get_all("Player", filters={'participated': ['=', True]}, pluck="name")
+		
+		for player in all_players:
+			player_doc = frappe.get_doc("Player", player)
+			
+			player_doc.compute_score()
+			
+			player_doc.new_result_available = True
+			player_doc.participated = False
+			player_doc.save()
 
 	def get_board_size(self):
 		return list(map(int, self.board_size.split(' ')))
