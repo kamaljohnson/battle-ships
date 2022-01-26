@@ -39,9 +39,7 @@
         loadBoard();
         boardInterationHandler();
 
-        fetchSessionPlayerId().then((playerId) => {
-            console.log(playerId);
-        });
+        fetchSessionPlayerId()
     });
 
     function loadBoard() {
@@ -105,19 +103,21 @@
         }
 
         if (attacksPlaced == maxAttacks && shipsPlaced == maxShips) {
-            uploadResult();
+            uploadFormation();
         }
     }
 
-    async function uploadResult() {
+    async function uploadFormation() {
         frappe.call({
-            method: 'battle_ships.www.battle.index.upload_result',
+            method: 'battle_ships.www.battle.index.upload_formation',
             args: {
                 player_id: await getSessionPlayerId(),
-                result: getItems()
+                formation: getItems()
             },
             callback: function() {
-                console.log('result uploaded');
+                frappe.show_alert({
+                    message:__('Formation updated'),
+                });
             }
         })
     }
@@ -126,27 +126,27 @@
         let shipElements = gameBoard.find(`[item='Ship']`);
         let attackElements = gameBoard.find(`[item='Attack'`);
 
-        let ships = [];
-        let attacks = [];
+        let shipCoordinates = [];
+        let attackCoordinates = [];
 
         for (var i = 0; i < shipElements.length; i++) {
 
             let row = parseInt($(shipElements[i]).attr('row'));
             let col = parseInt($(shipElements[i]).attr('col'));
 
-            ships.push([row, col]);
+            shipCoordinates.push([row, col]);
         }
 
         for (var i = 0; i < attackElements.length; i++) {
             let row = parseInt($(attackElements[i]).attr('row'));
             let col = parseInt($(attackElements[i]).attr('col'));
 
-            attacks.push([row, col]);
+            attackCoordinates.push([row, col]);
         }
 
         return {
-            ships: ships,
-            attacks: attacks
+            shipCoordinates: shipCoordinates,
+            attackCoordinates: attackCoordinates
         }
     }
 

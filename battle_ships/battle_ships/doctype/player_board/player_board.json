@@ -7,24 +7,26 @@
  "editable_grid": 1,
  "engine": "InnoDB",
  "field_order": [
-  "ships",
-  "attacks"
+  "ship_coordinates",
+  "attack_coordinates"
  ],
  "fields": [
   {
-   "fieldname": "ships",
+   "fieldname": "ship_coordinates",
    "fieldtype": "Data",
-   "label": "Ships"
+   "in_list_view": 1,
+   "label": "Ship Coordinates"
   },
   {
-   "fieldname": "attacks",
+   "fieldname": "attack_coordinates",
    "fieldtype": "Data",
-   "label": "Attacks"
+   "in_list_view": 1,
+   "label": "Attack Coordinates"
   }
  ],
  "index_web_pages_for_search": 1,
  "links": [],
- "modified": "2022-01-26 17:03:47.618538",
+ "modified": "2022-01-26 21:21:44.193824",
  "modified_by": "Administrator",
  "module": "Battle Ships",
  "name": "Player Board",
