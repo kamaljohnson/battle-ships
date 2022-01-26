@@ -12,7 +12,7 @@ class GameManager(Document):
 		self.stop_season()
 		
 		global_board = frappe.get_doc("Global Board")
-		global_board.start_battle()
+		global_board.set_battle_results()
 
 		print("\n------------------- BATTLE ENDED --------------------\n\n")
 

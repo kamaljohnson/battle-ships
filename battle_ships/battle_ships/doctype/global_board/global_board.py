@@ -6,7 +6,7 @@ from frappe.model.document import Document
 import json
 
 class GlobalBoard(Document):
-	def start_battle(self):
+	def set_battle_results(self):
 		self.set_global_formation()
 		self.normalize_board()
 		self.set_attacked_coordinates()
