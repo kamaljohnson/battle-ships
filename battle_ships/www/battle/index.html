@@ -39,7 +39,9 @@
         loadBoard();
         boardInterationHandler();
 
-        fetchSessionPlayerId();
+        fetchSessionPlayerId().then((playerId) => {
+            console.log(playerId);
+        });
     });
 
     function loadBoard() {
@@ -149,12 +151,19 @@
     }
 
     async function getSessionPlayerId() {
+        let playerId = '';
         if (localStorage['sessionPlayerId']) {
-            return localStorage['sessionPlayerId'];
+            playerId = localStorage['sessionPlayerId'];
         } else {
-            // TODO: fetch new player id from server
-            return '12342355';
+            await frappe.call({
+                method: 'battle_ships.www.battle.index.create_session_player',
+                callback: function(r) {
+                    localStorage['sessionPlayerId'] = r.message;
+                    playerId = r.message;
+                }
+            })
         }
+        return playerId
     }
 
 </script>
