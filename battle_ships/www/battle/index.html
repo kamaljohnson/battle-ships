@@ -1,0 +1,58 @@
+{% extends 'templates/base.html'%}
+
+{% block navbar %}{% endblock %}
+{% block content%}
+<main class="w-100 h-100">
+    <div class="game-title-bar mb-1 d-flex justify-content-center">
+        <h1 class="title m-x mt-4">{{ _("Battle Ships") }}</h1>
+    </div>
+    <hr class="m-0">
+    <div class="d-flex justify-content-center mt-20">
+        <div>
+            <div class="game-board container">
+        
+            </div>
+        </div>
+    </div>
+</main>
+<script>
+
+    let boatImageUrl = "https://cdn-icons.flaticon.com/png/512/870/premium/870170.png?token=exp=1643200075~hmac=11089a6c8c40dc6d9b132b5b9fdca329"
+    let attachImageUrl = "https://cdn-icons-png.flaticon.com/512/1828/1828665.png"
+
+    frappe.ready(function() {
+        loadBoard();
+    });
+
+    function loadBoard() {
+        let board = $(".game-board");
+
+
+        let maxRows = 6;
+        let maxColumns = 5;
+
+        for(var i = 0; i < maxRows; i++) {
+            let row = $("<div class='row'>");
+            board.append(row);
+            for(var j = 0; j < maxColumns; j++) {
+                row.append(`
+                    <div class="board-row-item row-item frappe-card m-1" style="height: 50px; width: 50px">
+                    </div>
+                `);
+            }
+        }
+    }
+</script>
+<style>
+    .title {
+        color: rgb(223, 223, 223)
+    }
+    .board-row-item {
+        background-color:rgb(58, 58, 58);
+    }
+    body {
+        background-color: rgb(0, 0, 0);
+    }
+</style>
+{% endblock %}
+{% block footer %}{% endblock %}
