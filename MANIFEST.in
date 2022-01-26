@@ -1,0 +1,18 @@
+include MANIFEST.in
+include requirements.txt
+include *.json
+include *.md
+include *.py
+include *.txt
+recursive-include battle_ships *.css
+recursive-include battle_ships *.csv
+recursive-include battle_ships *.html
+recursive-include battle_ships *.ico
+recursive-include battle_ships *.js
+recursive-include battle_ships *.json
+recursive-include battle_ships *.md
+recursive-include battle_ships *.png
+recursive-include battle_ships *.py
+recursive-include battle_ships *.svg
+recursive-include battle_ships *.txt
+recursive-exclude battle_ships *.pyc
