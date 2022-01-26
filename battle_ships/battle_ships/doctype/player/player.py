@@ -14,7 +14,7 @@ class Player(Document):
 	def update_formation(self, formation):
 		formation = json.loads(formation)
 
-		frappe.get_doc("Player Board", self.player_board).update_formation(formation)
+		return frappe.get_doc("Player Board", self.player_board).update_formation(formation)
 	
 	def get_formation(self):
 		return frappe.get_doc("Player Board", self.player_board).get_formation()

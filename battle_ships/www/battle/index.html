@@ -148,10 +148,16 @@
                 player_id: await getSessionPlayerId(),
                 formation: getItems()
             },
-            callback: function() {
-                frappe.show_alert({
-                    message:__('Formation updated'),
-                });
+            callback: function(r) {
+                if (r.message == 'Season Paused') {
+                    frappe.show_alert({
+                        message:__('Formation cannot be updated, Game season is paused'),
+                    });
+                } else {
+                    frappe.show_alert({
+                        message:__('Formation updated'),
+                    });
+                }
             }
         })
     }

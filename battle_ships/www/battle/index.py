@@ -3,7 +3,7 @@ import frappe
 @frappe.whitelist(allow_guest=True)
 def upload_formation(player_id, formation):
     player = frappe.get_doc("Player", player_id)
-    player.update_formation(formation)
+    return player.update_formation(formation)
 
 @frappe.whitelist(allow_guest=True)
 def fetch_formation(player_id):
