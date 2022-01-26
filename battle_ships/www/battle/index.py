@@ -14,3 +14,7 @@ def fetch_formation(player_id):
 def create_session_player():
     new_player = frappe.new_doc("Player").insert()
     return new_player.name
+
+@frappe.whitelist(allow_guest=True)
+def fetch_board_size():
+    return frappe.get_doc("Game Manager").get_board_size()

@@ -8,7 +8,8 @@
  "field_order": [
   "period",
   "next_battle_time",
-  "season_paused"
+  "season_paused",
+  "board_size"
  ],
  "fields": [
   {
@@ -26,12 +27,17 @@
    "fieldname": "season_paused",
    "fieldtype": "Check",
    "label": "Season Paused"
+  },
+  {
+   "fieldname": "board_size",
+   "fieldtype": "Data",
+   "label": "Board Size"
   }
  ],
  "index_web_pages_for_search": 1,
  "issingle": 1,
  "links": [],
- "modified": "2022-01-26 23:23:59.791210",
+ "modified": "2022-01-26 23:43:58.705553",
  "modified_by": "Administrator",
  "module": "Battle Ships",
  "name": "Game Manager",

@@ -27,9 +27,6 @@
     let shipImageUrl = "/images/ship.png"
     let attackImageUrl = "/images/attack.png"
 
-    let maxRows = 5;
-    let maxColumns = 5;
-
     let maxShips = 3;
     let maxAttacks = 3;
 
@@ -49,16 +46,20 @@
 
     });
 
-    function loadBoard() {
-        fetchFormation().then((r) => {
-            let items = r.message;
-            loadBlankBoard();
-            placeItemsOnBoard(items);
-            boardInterationHandler();
-        })
+    async function loadBoard() {
+        let boardSize = (await fetchBoardSize()).message;
+        let items = (await fetchFormation()).message;
+
+        loadBlankBoard(boardSize);
+        placeItemsOnBoard(items);
+        boardInterationHandler();
+
     }
 
-    function loadBlankBoard() {
+    function loadBlankBoard(boardSize) {
+        let maxRows = boardSize[0];
+        let maxColumns = boardSize[1];
+
         for(var i = 0; i < maxRows; i++) {
             let row = $("<div class='row'>");
             for(var j = 0; j < maxColumns; j++) {
@@ -215,6 +216,11 @@
         })
     }
 
+    async function fetchBoardSize() {
+        return frappe.call({
+            method: 'battle_ships.www.battle.index.fetch_board_size'
+        })
+    }
 </script>
 <style>
     .title {

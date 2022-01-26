@@ -12,4 +12,7 @@ class GameManager(Document):
 		self.save()
 
 		global_board = frappe.get_doc("Global Board")
-		global_board.normalize_all_formations()
+		global_board.start_battle()
+
+	def get_board_size(self):
+		return list(map(int, self.board_size.split(' ')))
