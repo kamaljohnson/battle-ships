@@ -22,3 +22,7 @@ def fetch_board_size():
 @frappe.whitelist(allow_guest=True)
 def check_and_fetch_battle_results(player_id):
     return frappe.get_doc("Player", player_id).check_and_get_battle_results()
+
+@frappe.whitelist(allow_guest=True)
+def play_again(player_id):
+    return frappe.get_doc("Player", player_id).play_again()

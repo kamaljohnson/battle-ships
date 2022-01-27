@@ -77,6 +77,8 @@
     }
 
     function loadBlankBoard(boardSize) {
+        gameBoard.empty();
+
         let maxRows = boardSize[0];
         let maxColumns = boardSize[1];
 
@@ -278,8 +280,23 @@
                 </div>
             </div>
         `);
-
+        
         showResultOnBoard(result);
+
+        $(".play-again-button").click(function() {
+            hideResults();
+            
+            playAgain().then(() => {
+                shipsPlaced = 0;
+                attacksPlaced = 0;
+                loadBoard();
+            })
+        })
+    }
+
+    function hideResults() {
+        let block = $(".results-block");
+        block.empty();
     }
 
     function showResultOnBoard(result) {
@@ -315,6 +332,15 @@
     function hideResultsBlock() {
         let block = $(".show-results-block");
         block.empty();
+    }
+
+    async function playAgain() {
+        return frappe.call({
+            method: 'battle_ships.www.battle.index.play_again',
+            args: {
+                player_id: await getSessionPlayerId()
+            }
+        })
     }
 </script>
 <style>

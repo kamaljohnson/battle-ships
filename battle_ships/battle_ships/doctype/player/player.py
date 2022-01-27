@@ -85,3 +85,9 @@ class Player(Document):
 			}
 		else:
 			return 'No Result'
+
+	def play_again(self):
+		self.new_result_available = False
+		self.score = 0
+		frappe.get_doc("Player Board", self.player_board).clear_board()
+		self.save(ignore_permissions=True)

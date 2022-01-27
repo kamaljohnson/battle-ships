@@ -47,4 +47,4 @@ class PlayerBoard(Document):
 	def clear_board(self):
 		self.ship_coordinates = ''
 		self.attack_coordinates = ''
-		self.save()
+		self.save(ignore_permissions=True)
