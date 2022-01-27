@@ -38,7 +38,7 @@ class Player(Document):
 				if attacked_coordinate == player_ship_coordinate:
 					ships_sank += 1
 		
-		score += (ships_sank * game_manager.score_decrement_for_ships_sank)
+		score -= (ships_sank * game_manager.score_decrement_for_ships_sank)
 
 		best_ship_coordinates = json.loads(global_board.best_ship_coordinates)
 
