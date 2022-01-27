@@ -12,7 +12,7 @@ def fetch_formation(player_id):
 
 @frappe.whitelist(allow_guest=True)
 def create_session_player():
-    new_player = frappe.new_doc("Player").insert()
+    new_player = frappe.new_doc("Player").insert(ignore_permissions=True)
     return new_player.name
 
 @frappe.whitelist(allow_guest=True)
