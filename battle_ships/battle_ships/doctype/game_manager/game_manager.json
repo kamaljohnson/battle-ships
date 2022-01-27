@@ -6,27 +6,17 @@
  "editable_grid": 1,
  "engine": "InnoDB",
  "field_order": [
-  "period",
-  "next_battle_time",
   "season_paused",
   "board_size",
   "section_break_5",
   "base_score",
   "score_decrement_for_ships_sank",
   "score_increment_for_best_ships",
-  "score_increment_for_best_attacks"
+  "score_increment_for_best_attacks",
+  "battle_start_trigger_player_count",
+  "current_player_participation_count"
  ],
  "fields": [
-  {
-   "fieldname": "period",
-   "fieldtype": "Duration",
-   "label": "Period"
-  },
-  {
-   "fieldname": "next_battle_time",
-   "fieldtype": "Datetime",
-   "label": "Next Battle At"
-  },
   {
    "default": "0",
    "fieldname": "season_paused",
@@ -61,12 +51,22 @@
   {
    "fieldname": "section_break_5",
    "fieldtype": "Section Break"
+  },
+  {
+   "fieldname": "battle_start_trigger_player_count",
+   "fieldtype": "Int",
+   "label": "Battle Start Trigger Player Count"
+  },
+  {
+   "fieldname": "current_player_participation_count",
+   "fieldtype": "Int",
+   "label": "Current Player Participation Count"
   }
  ],
  "index_web_pages_for_search": 1,
  "issingle": 1,
  "links": [],
- "modified": "2022-01-27 03:51:43.350986",
+ "modified": "2022-01-27 06:28:56.096265",
  "modified_by": "Administrator",
  "module": "Battle Ships",
  "name": "Game Manager",

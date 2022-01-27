@@ -63,7 +63,7 @@ class GlobalBoard(Document):
 		self.ships = json.dumps(ships)
 		self.attacks = json.dumps(attacks)
 
-		self.save()
+		self.save(ignore_permissions=True)
 
 	def normalize_board(self):
 		normalized_ships = {}
@@ -86,7 +86,7 @@ class GlobalBoard(Document):
 		self.normalized_ships = json.dumps(normalized_ships)
 		self.normalized_attacks = json.dumps(normalized_attacks)
 
-		self.save()
+		self.save(ignore_permissions=True)
 
 	def set_attacked_coordinates(self):
 		normalized_attacks = json.loads(self.normalized_attacks)
@@ -98,7 +98,7 @@ class GlobalBoard(Document):
 				attacked_coordinates.append(coordinate)
 		
 		self.attacked_coordinates = json.dumps(attacked_coordinates)
-		self.save()
+		self.save(ignore_permissions=True)
 
 	def set_best_ship_coordinates(self):
 		normalized_attacks = json.loads(self.normalized_attacks)
@@ -110,4 +110,4 @@ class GlobalBoard(Document):
 				best_ship_coordinates.append(coordinate)
 		
 		self.best_ship_coordinates = json.dumps(best_ship_coordinates)
-		self.save()
+		self.save(ignore_permissions=True)

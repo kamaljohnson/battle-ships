@@ -15,9 +15,10 @@
         </div>
     </div>
     <div class="results-block mt-10 d-flex justify-content-center">
-
     </div>
     <div class="show-results-block mt-10 d-flex justify-content-center">
+    </div>
+    <div class="session-players-left mt-10 d-flex justify-content-center">
     </div>
     <div class="w-100 mb-10" style="bottom: 0px; position: absolute;">
         <div class="container d-flex justify-content-center">
@@ -64,6 +65,10 @@
             showResultsBlock(result);
         } else {
             boardInterationHandler();
+
+            if (shipsPlaced == maxShips && attacksPlaced == maxAttacks) {
+                fetchSessionPlayersLeft();
+            }
         }
     }
 
@@ -176,10 +181,11 @@
                     frappe.show_alert({
                         message:__('Formation cannot be updated, Game season is paused'),
                     });
-                } else {
+                } else {                    
                     frappe.show_alert({
                         message:__('Formation updated'),
                     });
+
                 }
             }
         })
@@ -340,6 +346,36 @@
             args: {
                 player_id: await getSessionPlayerId()
             }
+        })
+    }
+
+    function fetchSessionPlayersLeft() {
+        return frappe.call({
+            method: 'battle_ships.www.battle.index.fetch_session_players_left',
+            callback: function(r) {
+                let count = r.message;
+                showSessionPlayersLeft(count);
+            }
+        })
+    }
+
+    function showSessionPlayersLeft(count) {
+        let block = $(".session-players-left");
+        block.empty();
+
+        block.append(`
+            <div>
+                <h1 class="display-4">Players Left : ${count}</h1>
+                <div role="button" class="refresh-players-left-button frappe-card d-flex justify-content-center mt-4">
+                <h2 class="pt-2">
+                        {{ _("Refresh") }}
+                    </h2>
+                </div>
+            </div>
+        `);
+
+        $(".refresh-players-left-button").click(function() {
+            location.reload();
         })
     }
 </script>

@@ -1,7 +1,6 @@
 # Copyright (c) 2022, Kamal Johnson and contributors
 # For license information, please see license.txt
 
-from codecs import ignore_errors
 import frappe
 from frappe.model.document import Document
 import json
@@ -15,6 +14,9 @@ class Player(Document):
 		formation = json.loads(formation)
 		self.participated = True
 		self.save(ignore_permissions=True)
+
+		game_manager = frappe.get_doc("Game Manager")
+		game_manager.update_players_left()
 
 		return frappe.get_doc("Player Board", self.player_board).update_formation(formation)
 	

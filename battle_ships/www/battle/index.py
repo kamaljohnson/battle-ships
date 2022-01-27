@@ -26,3 +26,7 @@ def check_and_fetch_battle_results(player_id):
 @frappe.whitelist(allow_guest=True)
 def play_again(player_id):
     return frappe.get_doc("Player", player_id).play_again()
+
+@frappe.whitelist(allow_guest=True)
+def fetch_session_players_left():
+    return frappe.get_doc("Game Manager").get_session_players_left()
