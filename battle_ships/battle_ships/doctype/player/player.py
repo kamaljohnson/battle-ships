@@ -14,7 +14,6 @@ class Player(Document):
 		formation = json.loads(formation)
 		self.participated = True
 		self.save(ignore_permissions=True)
-		frappe.db.commit()
 
 		return frappe.get_doc("Player Board", self.player_board).update_formation(formation)
 	
@@ -61,7 +60,6 @@ class Player(Document):
 
 		self.score = score
 		self.save(ignore_permissions=True)
-		frappe.db.commit()
 
 	def check_and_get_battle_results(self):
 		if self.new_result_available:
@@ -92,4 +90,3 @@ class Player(Document):
 		self.score = 0
 		frappe.get_doc("Player Board", self.player_board).clear_board()
 		self.save(ignore_permissions=True)
-		frappe.db.commit()

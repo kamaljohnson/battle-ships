@@ -23,7 +23,6 @@ class PlayerBoard(Document):
 			self.ship_coordinates = json.dumps(ship_coordinates)
 			self.attack_coordinates = json.dumps(attack_coordinates)
 			self.save(ignore_permissions=True)
-			frappe.db.commit()
 
 			game_manager.update_session_players_left()
 			return
@@ -51,4 +50,3 @@ class PlayerBoard(Document):
 		self.ship_coordinates = ''
 		self.attack_coordinates = ''
 		self.save(ignore_permissions=True)
-		frappe.db.commit()

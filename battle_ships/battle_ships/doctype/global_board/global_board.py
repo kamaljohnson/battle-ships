@@ -12,9 +12,6 @@ class GlobalBoard(Document):
 		self.set_attacked_coordinates()
 		self.set_best_ship_coordinates()
 
-		game_manager = frappe.get_doc("Game Manager")
-		game_manager.start_season()
-
 	def set_global_formation(self):
 		all_player_boards = frappe.get_all("Player Board", fields=['ship_coordinates', 'attack_coordinates'])
 
@@ -87,7 +84,6 @@ class GlobalBoard(Document):
 		self.normalized_attacks = json.dumps(normalized_attacks)
 
 		self.save(ignore_permissions=True)
-		frappe.db.commit()
 
 	def set_attacked_coordinates(self):
 		normalized_attacks = json.loads(self.normalized_attacks)
@@ -100,7 +96,6 @@ class GlobalBoard(Document):
 		
 		self.attacked_coordinates = json.dumps(attacked_coordinates)
 		self.save(ignore_permissions=True)
-		frappe.db.commit()
 
 	def set_best_ship_coordinates(self):
 		normalized_attacks = json.loads(self.normalized_attacks)
@@ -113,4 +108,3 @@ class GlobalBoard(Document):
 		
 		self.best_ship_coordinates = json.dumps(best_ship_coordinates)
 		self.save(ignore_permissions=True)
-		frappe.db.commit()
