@@ -1,6 +1,7 @@
 # Copyright (c) 2022, Kamal Johnson and contributors
 # For license information, please see license.txt
 
+from codecs import ignore_errors
 import frappe
 from frappe.model.document import Document
 import json
@@ -60,3 +61,27 @@ class Player(Document):
 
 		self.score = score
 		self.save()
+
+	def check_and_get_battle_results(self):
+		if self.new_result_available:
+			global_board = frappe.get_doc("Global Board")
+
+			ac = json.loads('[]' if global_board.attacked_coordinates == '' else global_board.attacked_coordinates)
+			bsc = json.loads('[]' if global_board.best_ship_coordinates == '' else global_board.best_ship_coordinates)
+
+			best_ship_coordinates = []
+			attacked_coordinates = []
+
+			for c in ac:
+				attacked_coordinates.append(json.loads(c))
+
+			for c in bsc:
+				best_ship_coordinates.append(json.loads(c))
+
+			return {
+				"score": self.score,
+				"attacked_coordinates": attacked_coordinates,
+				"best_ship_coordinates": best_ship_coordinates
+			}
+		else:
+			return 'No Result'

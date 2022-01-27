@@ -14,10 +14,15 @@
             </div>
         </div>
     </div>
+    <div class="results-block mt-10 d-flex justify-content-center">
+
+    </div>
+    <div class="show-results-block mt-10 d-flex justify-content-center">
+    </div>
     <div class="w-100 mb-10" style="bottom: 0px; position: absolute;">
         <div class="container d-flex justify-content-center">
             <div>
-                <a href="https://frappeframework.com/?source=website_footer" style="color: white;">Build on Frappe</a>
+                <a href="https://frappeframework.com/?source=website_footer" style="color: white;">{{ _("Build on Frappe") }}</a>
             </div>
         </div>
     </div>
@@ -37,23 +42,38 @@
 
     let fetchSessionPlayerId = getSessionPlayerId;
 
-    frappe.ready(function() {
+    frappe.ready(async function() {
         gameBoard = $(".game-board");
+        hideResultsBlock();
         
         fetchSessionPlayerId().then(() => {
             loadBoard();
         })
-
     });
-
+    
     async function loadBoard() {
         let boardSize = (await fetchBoardSize()).message;
         let items = (await fetchFormation()).message;
-
+        
         loadBlankBoard(boardSize);
         placeItemsOnBoard(items);
-        boardInterationHandler();
 
+        let result = (await checkAndFetchBattleResults()).message;
+
+        if (result != 'No Result') {
+            showResultsBlock(result);
+        } else {
+            boardInterationHandler();
+        }
+    }
+
+    async function checkAndFetchBattleResults() {
+        return frappe.call({
+            method: 'battle_ships.www.battle.index.check_and_fetch_battle_results',
+            args: {
+                player_id: await getSessionPlayerId()
+            }
+        })
     }
 
     function loadBlankBoard(boardSize) {
@@ -221,16 +241,103 @@
             method: 'battle_ships.www.battle.index.fetch_board_size'
         })
     }
+
+    function showResultsBlock(result) {
+        let block = $(".show-results-block");
+        block.empty();
+
+        block.append(`
+            <div>
+                <h3>{{ _("The result of the last battle is here") }}</h3>
+                <div role="button" class="show-results-button frappe-card d-flex justify-content-center mt-4" style="background-color: rgb(255, 170, 11);">
+                    <h2 class="pt-2">
+                        {{ _("See Result") }}
+                    </h2>
+                </div>
+            </div>
+        `);
+
+        $(".show-results-button").click(function() {
+            showResults(result);
+        });
+    }
+
+    function showResults(result) {
+        hideResultsBlock();
+
+        let block = $(".results-block");
+        block.empty();
+
+        block.append(`
+            <div>
+                <h1 class="display-4">Your Score : ${result.score}</h1>
+                <div role="button" class="play-again-button frappe-card d-flex justify-content-center mt-4">
+                    <h2 class="pt-2">
+                        {{ _("Play Again") }}
+                    </h2>
+                </div>
+            </div>
+        `);
+
+        showResultOnBoard(result);
+    }
+
+    function showResultOnBoard(result) {
+        let attachedCoordinates = result.attacked_coordinates;
+        let bestShipCoordinates = result.best_ship_coordinates;
+
+        for (var i = 0; i < attachedCoordinates.length; i++) {
+            let row = attachedCoordinates[i][0]
+            let col = attachedCoordinates[i][1]
+            holder = gameBoard.find(`[row=${row}][col=${col}]`);
+            let blockItem = $(holder).attr('item');
+            if (blockItem == "Ship") {
+                holder.css('background-color', 'rgb(236, 60, 60)');
+            } else {
+                holder.css('background-color', 'rgb(253, 143, 100)');
+            }
+        }
+
+        for (var i = 0; i < bestShipCoordinates.length; i++) {
+            let row = bestShipCoordinates[i][0]
+            let col = bestShipCoordinates[i][1]
+            holder = gameBoard.find(`[row=${row}][col=${col}]`);
+            let blockItem = $(holder).attr('item');
+            if (blockItem == "Ship") {
+                holder.css('background-color', 'rgb(60, 105, 255)');
+            } else {
+                holder.css('background-color', 'rgb(149, 251, 255)');
+            }
+        }
+
+    }
+
+    function hideResultsBlock() {
+        let block = $(".show-results-block");
+        block.empty();
+    }
 </script>
 <style>
     .title {
-        color: rgb(223, 223, 223)
+        color: rgb(223, 223, 223);
     }
     .board-row-item {
         background-color:rgb(58, 58, 58);
     }
     body {
         background-color: rgb(0, 0, 0);
+    }
+    h3 {
+        color: rgb(223, 223, 223);
+    }
+    h1 {
+        color: rgb(223, 223, 223);
+    }
+    .play-again-button {
+        background-color: rgb(132, 0, 255);
+    }
+    .play-again-button h2 {
+        color: rgb(223, 223, 223);
     }
 </style>
 {% endblock %}

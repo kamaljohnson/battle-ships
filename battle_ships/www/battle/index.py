@@ -18,3 +18,7 @@ def create_session_player():
 @frappe.whitelist(allow_guest=True)
 def fetch_board_size():
     return frappe.get_doc("Game Manager").get_board_size()
+
+@frappe.whitelist(allow_guest=True)
+def check_and_fetch_battle_results(player_id):
+    return frappe.get_doc("Player", player_id).check_and_get_battle_results()
