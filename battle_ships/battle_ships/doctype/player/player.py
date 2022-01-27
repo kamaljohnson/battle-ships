@@ -14,9 +14,7 @@ class Player(Document):
 		formation = json.loads(formation)
 		self.participated = True
 		self.save(ignore_permissions=True)
-
-		game_manager = frappe.get_doc("Game Manager")
-		game_manager.update_players_left()
+		frappe.db.commit()
 
 		return frappe.get_doc("Player Board", self.player_board).update_formation(formation)
 	
@@ -62,7 +60,8 @@ class Player(Document):
 		score += (ships_sank * game_manager.score_increment_for_best_attacks)
 
 		self.score = score
-		self.save()
+		self.save(ignore_permissions=True)
+		frappe.db.commit()
 
 	def check_and_get_battle_results(self):
 		if self.new_result_available:
@@ -93,3 +92,4 @@ class Player(Document):
 		self.score = 0
 		frappe.get_doc("Player Board", self.player_board).clear_board()
 		self.save(ignore_permissions=True)
+		frappe.db.commit()
