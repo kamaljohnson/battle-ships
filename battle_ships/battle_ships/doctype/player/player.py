@@ -8,7 +8,7 @@ import json
 class Player(Document):
 	def before_insert(self):
 		if not self.player_board:
-			self.player_board = frappe.new_doc("Player Board").insert().name
+			self.player_board = frappe.new_doc("Player Board").insert(ignore_permissions=True).name
 
 	def update_formation(self, formation):
 		formation = json.loads(formation)
