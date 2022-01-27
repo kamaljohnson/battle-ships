@@ -13,9 +13,10 @@ class GameManager(Document):
 		
 		global_board = frappe.get_doc("Global Board")
 		self.clear_board_of_non_participants()
-		global_board.set_battle_results()
 
-		self.update_player_scores()
+		if len(frappe.get_all("Player", filters={'participated': ['=', True]})) > 0:
+			global_board.set_battle_results()
+			self.update_player_scores()
 
 		print("\n------------------- BATTLE ENDED --------------------\n\n")
 
