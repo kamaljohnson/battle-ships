@@ -29,8 +29,8 @@ class PlayerBoard(Document):
 			return
 		
 	def get_formation(self):
-		sc = json.loads('[]' if self.ship_coordinates == '' else self.ship_coordinates)
-		ac = json.loads('[]' if self.attack_coordinates == '' else self.attack_coordinates)
+		sc = json.loads('[]' if not self.ship_coordinates else self.ship_coordinates)
+		ac = json.loads('[]' if not self.attack_coordinates else self.attack_coordinates)
 
 		ship_coordinates = []
 		attack_coordinates = []
