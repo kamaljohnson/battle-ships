@@ -57,8 +57,8 @@ class GameManager(Document):
 
 	def update_session_players_left(self):
 		self.current_player_participation_count = len(frappe.get_all("Player", filters={'participated': ['=', True]}))
-		self.save(ignore_permissions=True)
-		frappe.db.commit()
-
 		if self.current_player_participation_count >= self.battle_start_trigger_player_count:
 			self.start_battle()
+
+		self.save(ignore_permissions=True)
+		frappe.db.commit()
