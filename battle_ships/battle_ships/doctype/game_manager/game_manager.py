@@ -49,3 +49,6 @@ class GameManager(Document):
 		else:
 			self.current_player_participation_count = current_player_participation_count
 			self.save(ignore_permissions=True)
+
+	def get_battle_start_time(self):
+		return self.battle_start_time

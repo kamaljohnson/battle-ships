@@ -14,7 +14,8 @@
   "score_increment_for_best_ships",
   "score_increment_for_best_attacks",
   "battle_start_trigger_player_count",
-  "current_player_participation_count"
+  "current_player_participation_count",
+  "battle_start_time"
  ],
  "fields": [
   {
@@ -61,12 +62,17 @@
    "fieldname": "current_player_participation_count",
    "fieldtype": "Int",
    "label": "Current Player Participation Count"
+  },
+  {
+   "fieldname": "battle_start_time",
+   "fieldtype": "Datetime",
+   "label": "Next Battle At"
   }
  ],
  "index_web_pages_for_search": 1,
  "issingle": 1,
  "links": [],
- "modified": "2022-01-27 06:28:56.096265",
+ "modified": "2022-01-30 01:18:10.153555",
  "modified_by": "Administrator",
  "module": "Battle Ships",
  "name": "Game Manager",

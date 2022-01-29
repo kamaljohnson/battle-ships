@@ -30,3 +30,7 @@ def play_again(player_id):
 @frappe.whitelist(allow_guest=True)
 def fetch_session_players_left():
     return frappe.get_doc("Game Manager").get_session_players_left()
+
+@frappe.whitelist(allow_guest=True)
+def fetch_next_battle_start_time():
+    return frappe.get_doc("Game Manager").get_battle_start_time()

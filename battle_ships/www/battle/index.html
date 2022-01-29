@@ -6,26 +6,19 @@
     <div class="game-title-bar mb-1 d-flex justify-content-center">
         <h1 class="title m-x mt-4">{{ _("Battle Ships") }}</h1>
     </div>
-    <hr class="m-0">
-    <div class="d-flex justify-content-center mt-20">
+    <div class="fustify-content-center mt-5 text-center">
+        <h3 id="battleStartTimer"></h3>
+    </div>
+    <div class="d-flex justify-content-center mt-5">
         <div>
             <div class="game-board container">
         
             </div>
         </div>
     </div>
-    <div class="results-block mt-10 d-flex justify-content-center">
+    <div class="results-block mt-5 d-flex justify-content-center">
     </div>
-    <div class="show-results-block mt-10 d-flex justify-content-center">
-    </div>
-    <div class="session-players-left mt-10 d-flex justify-content-center">
-    </div>
-    <div class="w-100 mb-5" style="bottom: 0px; position: absolute;">
-        <div class="container d-flex justify-content-center">
-            <div>
-                <a href="https://frappeframework.com/?source=website_footer" style="color: white;">{{ _("Build on Frappe") }}</a>
-            </div>
-        </div>
+    <div class="show-results-block mt-5 d-flex justify-content-center">
     </div>
 </main>
 <script>
@@ -45,31 +38,71 @@
 
     frappe.ready(async function() {
         gameBoard = $(".game-board");
-        hideResultsBlock();
         
         fetchSessionPlayerId().then(() => {
             loadBoard();
         })
     });
     
+    async function fetchBattleStartTime(resultAvailable=false) {
+        frappe.call({
+            method: 'battle_ships.www.battle.index.fetch_next_battle_start_time',
+            callback: function(r) {
+                showBattleCountdownTimer(new Date(r.message).getTime(), resultAvailable)
+            }
+        })
+    }
+
+    function showBattleCountdownTimer(battleStartTime, resultAvailable=false) {
+        var x = setInterval(function() {
+            var now = new Date().getTime();
+          
+            var distance = battleStartTime - now;
+          
+            var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+            var hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+            var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+          
+            var countdown = (days > 0 ? days + "d " : '') + (hours > 0 ? hours + "h " : '') + (minutes > 0 ? minutes + "m " : '') + (seconds > 0 ? seconds + "s " : '');
+
+            document.getElementById("battleStartTimer").innerHTML = `${resultAvailable ? 'Next battle in' : 'Battle starts in'} <strong>${countdown}<strong>`;
+          
+            if (distance < 0) {
+                $('#battleStartTimer').empty();
+
+                checkAndFetchBattleResults().then(function(r) {
+                    result = r.message;
+                    if (result != 'No Result') {
+                        showResultsBlock(result);
+                    }
+                })
+                clearInterval(x);
+            }
+        }, 1000);
+    }
+
     async function loadBoard() {
         let boardSize = (await fetchBoardSize()).message;
         let items = (await fetchFormation()).message;
         
         loadBlankBoard(boardSize);
         placeItemsOnBoard(items);
-
+        
         let result = (await checkAndFetchBattleResults()).message;
 
         if (result != 'No Result') {
             showResultsBlock(result);
         } else {
             boardInterationHandler();
-
+    
             if (shipsPlaced == maxShips && attacksPlaced == maxAttacks) {
                 fetchSessionPlayersLeft();
             }
         }
+
+        fetchBattleStartTime(false);
+
     }
 
     async function checkAndFetchBattleResults() {
@@ -182,10 +215,10 @@
                         message:__('Formation cannot be updated, Game season is paused'),
                     });
                 } else {
+                    console.log('here')
                     frappe.show_alert({
                         message:__('Formation updated'),
                     });
-                    location.reload();
                 }
             }
         })
@@ -364,12 +397,12 @@
         block.empty();
 
         block.append(`
-            <div>
-                <h1 class="display-4">Players Left : ${count}</h1>
-                <div role="button" class="refresh-players-left-button frappe-card d-flex justify-content-center mt-4">
-                <h2 class="pt-2">
+            <div class="container w-30">
+                <h3 class="text-center">${count} more player${count > 1 ? 's' : ''} required for the battle to start</h3>
+                <div role="button" class="refresh-players-left-button d-flex justify-content-center mt-4">
+                    <button class="pt-2 btn btn-light">
                         {{ _("Refresh") }}
-                    </h2>
+                    </button>
                 </div>
             </div>
         `);
@@ -390,6 +423,9 @@
         background-color: rgb(0, 0, 0);
     }
     h3 {
+        color: rgb(223, 223, 223);
+    }
+    h2 {
         color: rgb(223, 223, 223);
     }
     h1 {
