@@ -23,8 +23,6 @@ class PlayerBoard(Document):
 			self.ship_coordinates = json.dumps(ship_coordinates)
 			self.attack_coordinates = json.dumps(attack_coordinates)
 			self.save(ignore_permissions=True)
-
-			game_manager.update_session_players_left()
 			return
 		
 	def get_formation(self):

@@ -1,6 +1,8 @@
 # Copyright (c) 2022, Kamal Johnson and contributors
 # For license information, please see license.txt
 
+
+from frappe.utils import datetime
 import frappe
 from frappe.model.document import Document
 
@@ -8,6 +10,7 @@ class GameManager(Document):
 	@frappe.whitelist()
 	def start_battle(self):	
 		# TODO: Lock the season, no more updates when in battle	
+
 		global_board = frappe.get_doc("Global Board")
 		self.clear_board_of_non_participants()
 
@@ -16,6 +19,7 @@ class GameManager(Document):
 			self.update_player_scores()
 
 		self.current_player_participation_count = 0
+		self.battle_start_time = (datetime.datetime.now() + datetime.timedelta(days=1))
 		self.save()
 
 	def clear_board_of_non_participants(self):
@@ -39,18 +43,6 @@ class GameManager(Document):
 
 	def get_board_size(self):
 		return list(map(int, self.board_size.split(' ')))
-
-	def get_session_players_left(self):
-		players_left = self.battle_start_trigger_player_count - self.current_player_participation_count
-		return players_left
-
-	def update_session_players_left(self):
-		current_player_participation_count = len(frappe.get_all("Player", filters={'participated': ['=', True]}))
-		if current_player_participation_count >= self.battle_start_trigger_player_count:
-			self.start_battle()
-		else:
-			self.current_player_participation_count = current_player_participation_count
-			self.save(ignore_permissions=True)
 
 	def get_battle_start_time(self):
 		return self.battle_start_time
