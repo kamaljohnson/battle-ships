@@ -95,13 +95,13 @@
             showResultsBlock(result);
         } else {
             boardInterationHandler();
-    
+            
             if (shipsPlaced == maxShips && attacksPlaced == maxAttacks) {
                 fetchSessionPlayersLeft();
             }
+            fetchBattleStartTime(false);
         }
 
-        fetchBattleStartTime(false);
 
     }
 
