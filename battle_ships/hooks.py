@@ -115,23 +115,11 @@ app_license = "MIT"
 # Scheduled Tasks
 # ---------------
 
-# scheduler_events = {
-# 	"all": [
-# 		"battle_ships.tasks.all"
-# 	],
-# 	"daily": [
-# 		"battle_ships.tasks.daily"
-# 	],
-# 	"hourly": [
-# 		"battle_ships.tasks.hourly"
-# 	],
-# 	"weekly": [
-# 		"battle_ships.tasks.weekly"
-# 	],
-# 	"monthly": [
-# 		"battle_ships.tasks.monthly"
-# 	],
-# }
+scheduler_events = {
+	"cron": {
+        "48 20 * * *": ["battle_ships.tasks.start_battle"],
+    }
+}
 
 # Testing
 # -------
