@@ -16,12 +16,14 @@ class GameManager(Document):
 			self.update_player_scores()
 
 		self.current_player_participation_count = 0
-		self.save(ignore_permissions=True)
+		self.save()
 
 	def clear_board_of_non_participants(self):
-		all_inactive_players = frappe.get_all("Player", filters={'participated': ['=', False]}, fields=["player_board", "name"])
+		all_inactive_players = frappe.get_all("Player", filters={'participated': ['=', False]}, pluck="name")
 		for player in all_inactive_players:
-			player_board = frappe.get_doc("Player Board", player.player_board)
+			player_doc = frappe.get_doc("Player", player)
+			player_doc.clean_up()
+			player_board = frappe.get_doc("Player Board", player_doc.player_board)
 			player_board.clear_board()
 
 	def update_player_scores(self):
@@ -33,7 +35,7 @@ class GameManager(Document):
 			
 			player_doc.new_result_available = True
 			player_doc.participated = False
-			player_doc.save(ignore_permissions=True)
+			player_doc.save()
 
 	def get_board_size(self):
 		return list(map(int, self.board_size.split(' ')))

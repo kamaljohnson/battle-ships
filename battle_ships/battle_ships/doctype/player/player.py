@@ -90,3 +90,7 @@ class Player(Document):
 		self.score = 0
 		frappe.get_doc("Player Board", self.player_board).clear_board()
 		self.save(ignore_permissions=True)
+
+	def clean_up(self):
+		self.new_result_available = False
+		self.save()
