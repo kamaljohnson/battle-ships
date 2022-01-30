@@ -28,9 +28,8 @@ class Player(Document):
 		player_board_doc = frappe.get_doc("Player Board", self.player_board)
 		
 		attacked_coordinates = json.loads(global_board.attacked_coordinates)
-
 		player_ship_coordinates = json.loads(player_board_doc.ship_coordinates)
-		player_attack_coordinates = json.loads(player_board_doc.attack_coordinates)
+		# player_attack_coordinates = json.loads(player_board_doc.attack_coordinates)
 
 		ships_sank = 0
 		for attacked_coordinate in attacked_coordinates:
@@ -48,15 +47,17 @@ class Player(Document):
 				if best_ship_coordinate == player_ship_coordinate:
 					best_ships += 1
 
-		score += (ships_sank * game_manager.score_increment_for_best_ships)
+		score += (best_ships * game_manager.score_increment_for_best_ships)
+
+		# TODO: this is not the logic for best attacks
+		# it should be "the attacks which sank the most ships"		
+		# best_attacks = 0
+		# for attacked_coordinate in attacked_coordinates:
+		# 	for player_attack_coordinate in player_attack_coordinates:
+		# 		if attacked_coordinate == player_attack_coordinate:
+		# 			best_attacks += 1
 		
-		best_attacks = 0
-		for attacked_coordinate in attacked_coordinates:
-			for player_attack_coordinate in player_attack_coordinates:
-				if attacked_coordinate == player_attack_coordinate:
-					best_attacks += 1
-		
-		score += (ships_sank * game_manager.score_increment_for_best_attacks)
+		# score += (best_attacks * game_manager.score_increment_for_best_attacks)
 
 		self.score = score
 		self.save(ignore_permissions=True)
