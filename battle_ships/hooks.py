@@ -117,7 +117,7 @@ app_license = "MIT"
 
 scheduler_events = {
 	"cron": {
-        "48 20 * * *": ["battle_ships.tasks.start_battle"],
+        "15 10 * * *": ["battle_ships.tasks.start_battle"],
     }
 }
 
