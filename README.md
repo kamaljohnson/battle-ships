@@ -1,6 +1,6 @@
 ## Battle Ships
 
-An online battle ship game with a twist
+[Play Now](https://battle-ships.frappe.cloud/)
 
 #### License
 
